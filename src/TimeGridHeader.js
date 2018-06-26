@@ -12,6 +12,10 @@ import { notify } from './utils/helpers'
 import { accessor as get } from './utils/accessors'
 
 class TimeGridHeader extends React.Component {
+  state = {
+    expanded: false,
+  }
+
   static propTypes = {
     range: PropTypes.array.isRequired,
     events: PropTypes.array.isRequired,
@@ -172,32 +176,50 @@ class TimeGridHeader extends React.Component {
               {this.renderHeaderResources(range, resources)}
             </div>
           )}
-
-          <DateContentRow
-            isAllDay
-            rtl={rtl}
-            getNow={getNow}
-            minRows={2}
-            range={range}
-            events={events}
-            className="rbc-allday-cell"
-            selectable={selectable}
-            selected={this.props.selected}
-            eventComponent={eventComponent}
-            eventWrapperComponent={eventWrapperComponent}
-            dateCellWrapperComponent={dateCellWrapperComponent}
-            dayPropGetter={this.props.dayPropGetter}
-            titleAccessor={this.props.titleAccessor}
-            tooltipAccessor={this.props.tooltipAccessor}
-            startAccessor={this.props.startAccessor}
-            endAccessor={this.props.endAccessor}
-            allDayAccessor={this.props.allDayAccessor}
-            eventPropGetter={this.props.eventPropGetter}
-            onSelect={this.props.onSelectEvent}
-            onDoubleClick={this.props.onDoubleClickEvent}
-            onSelectSlot={this.props.onSelectSlot}
-            longPressThreshold={this.props.longPressThreshold}
-          />
+          <div className="rbc-allday-cell-wrapper">
+            <DateContentRow
+              isAllDay
+              rtl={rtl}
+              getNow={getNow}
+              minRows={1}
+              range={range}
+              events={
+                !this.state.expanded && events.length ? [events[0]] : events
+              }
+              className="rbc-allday-cell"
+              selectable={selectable}
+              selected={this.props.selected}
+              eventComponent={eventComponent}
+              eventWrapperComponent={eventWrapperComponent}
+              dateCellWrapperComponent={dateCellWrapperComponent}
+              dayPropGetter={this.props.dayPropGetter}
+              titleAccessor={this.props.titleAccessor}
+              tooltipAccessor={this.props.tooltipAccessor}
+              startAccessor={this.props.startAccessor}
+              endAccessor={this.props.endAccessor}
+              allDayAccessor={this.props.allDayAccessor}
+              eventPropGetter={this.props.eventPropGetter}
+              onSelect={this.props.onSelectEvent}
+              onDoubleClick={this.props.onDoubleClickEvent}
+              onSelectSlot={this.props.onSelectSlot}
+              longPressThreshold={this.props.longPressThreshold}
+            />
+          </div>
+          {!!events.length && (
+            <button
+              onClick={() => this.setState({ expanded: !this.state.expanded })}
+              className={cn(
+                'rbc-allday-button',
+                this.state.expanded && 'expanded'
+              )}
+            >
+              {this.state.expanded ? (
+                <span>&#9650;</span>
+              ) : (
+                <span>&#9660;</span>
+              )}
+            </button>
+          )}
         </div>
       </div>
     )
