@@ -12,6 +12,10 @@ import { notify } from './utils/helpers'
 import { accessor as get } from './utils/accessors'
 
 class TimeGridHeader extends React.Component {
+  state = {
+    expanded: false,
+  }
+
   static propTypes = {
     range: PropTypes.array.isRequired,
     events: PropTypes.array.isRequired,
@@ -177,9 +181,11 @@ class TimeGridHeader extends React.Component {
             isAllDay
             rtl={rtl}
             getNow={getNow}
-            minRows={2}
+            minRows={1}
             range={range}
-            events={events}
+            events={
+              !this.state.expanded && events.length ? [events[0]] : events
+            }
             className="rbc-allday-cell"
             selectable={selectable}
             selected={this.props.selected}
@@ -198,6 +204,17 @@ class TimeGridHeader extends React.Component {
             onSelectSlot={this.props.onSelectSlot}
             longPressThreshold={this.props.longPressThreshold}
           />
+          {events.length > 1 && (
+            <button
+              onClick={() => this.setState({ expanded: !this.state.expanded })}
+              className={cn(
+                'rbc-allday-button',
+                this.state.expanded && 'expanded'
+              )}
+            >
+              &#9660;
+            </button>
+          )}
         </div>
       </div>
     )
