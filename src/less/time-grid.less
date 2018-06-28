@@ -84,6 +84,11 @@
 
   .rbc-allday-button {
     display: block;
+
+    &.expanded > span {
+      display: inherit;
+      transform: rotate(180deg);
+    }
   }
 
   // .rbc-gutter-cell {

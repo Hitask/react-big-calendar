@@ -181,11 +181,10 @@ class TimeGridHeader extends React.Component {
               isAllDay
               rtl={rtl}
               getNow={getNow}
-              minRows={1}
+              minRows={2}
               range={range}
-              events={
-                !this.state.expanded && events.length ? [events[0]] : events
-              }
+              events={this.state.expanded ? events : events.slice(0, 1)}
+              expanded={this.state.expanded}
               className="rbc-allday-cell"
               selectable={selectable}
               selected={this.props.selected}
@@ -213,11 +212,7 @@ class TimeGridHeader extends React.Component {
                 this.state.expanded && 'expanded'
               )}
             >
-              {this.state.expanded ? (
-                <span>&#9650;</span>
-              ) : (
-                <span>&#9660;</span>
-              )}
+              <span>&#9660;</span>
             </button>
           )}
         </div>
