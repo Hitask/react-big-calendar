@@ -151,16 +151,11 @@ class DayColumn extends React.Component {
   renderEvents = () => {
     let {
       components: { event: EventComponent },
-      culture,
       endAccessor,
       eventPropGetter,
-      eventTimeRangeEndFormat,
-      eventTimeRangeFormat,
-      eventTimeRangeStartFormat,
       eventWrapperComponent: EventWrapper,
       events,
       max,
-      messages,
       min,
       rtl: isRtl,
       selected,
@@ -177,7 +172,6 @@ class DayColumn extends React.Component {
     })
 
     return styledEvents.map(({ event, style }, idx) => {
-      let _eventTimeRangeFormat = eventTimeRangeFormat
       let _continuesPrior = false
       let _continuesAfter = false
       let start = get(event, startAccessor)
@@ -186,13 +180,11 @@ class DayColumn extends React.Component {
       if (start < min) {
         start = min
         _continuesPrior = true
-        _eventTimeRangeFormat = eventTimeRangeEndFormat
       }
 
       if (end > max) {
         end = max
         _continuesAfter = true
-        _eventTimeRangeFormat = eventTimeRangeStartFormat
       }
 
       let continuesPrior = this.slotMetrics.startsBefore(start)
@@ -200,12 +192,6 @@ class DayColumn extends React.Component {
 
       let title = get(event, titleAccessor)
       let tooltip = get(event, tooltipAccessor)
-      let label
-      if (_continuesPrior && _continuesAfter) {
-        label = messages.allDay
-      } else {
-        label = localizer.format({ start, end }, _eventTimeRangeFormat, culture)
-      }
 
       let _isSelected = isSelected(event, selected)
 
@@ -235,11 +221,7 @@ class DayColumn extends React.Component {
               [isRtl ? 'right' : 'left']: `${Math.max(0, xOffset)}%`,
               width: `${width}%`,
             }}
-            title={
-              tooltip
-                ? (typeof label === 'string' ? label + ': ' : '') + tooltip
-                : undefined
-            }
+            title={tooltip || undefined}
             onClick={e => this._select(event, e)}
             onDoubleClick={e => this._doubleClick(event, e)}
             className={cn('rbc-event', className, {
@@ -250,7 +232,6 @@ class DayColumn extends React.Component {
               'rbc-event-continues-day-after': _continuesAfter,
             })}
           >
-            <div className="rbc-event-label">{label}</div>
             <div className="rbc-event-content">
               {EventComponent ? (
                 <EventComponent event={event} title={title} />
