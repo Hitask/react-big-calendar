@@ -32,19 +32,6 @@
     }
   }
 
-  .rbc-time-content .rbc-event {
-    padding-top: 9px;
-    padding-bottom: 9px;
-  }
-
-  .rbc-time-header,
-  .rbc-month-view {
-    .rbc-event {
-      padding-left: 9px;
-      padding-right: 9px;
-    }
-  }
-
   &.rbc-addons-dnd-is-dragging .rbc-event {
     pointer-events: none;
     opacity: .50;
@@ -77,7 +64,8 @@
     position: absolute;
     top: 0;
     bottom: 0;
-    padding: 4px 3px;
+    padding: 0px 3px;
+    display: flex;
     cursor: ew-resize;
     &:first-child { left: -9px; }
     &:last-child { right: -9px; }
