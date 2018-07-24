@@ -158,7 +158,6 @@ class TimeGridHeader extends React.Component {
     return (
       <div
         ref="headerCell"
-        style={style}
         className={cn('rbc-time-header', isOverflowing && 'rbc-overflowing')}
       >
         <div className="rbc-label rbc-time-header-gutter" style={{ width }} />
