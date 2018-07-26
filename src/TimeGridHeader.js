@@ -150,6 +150,13 @@ class TimeGridHeader extends React.Component {
       eventWrapperComponent,
     } = this.props
 
+    const scrollbarOffset = scrollbarSize()
+    const headerCellStyle = scrollbarOffset
+      ? {
+          paddingRight: scrollbarOffset,
+        }
+      : {}
+
     let style = {}
     if (isOverflowing) {
       style[rtl ? 'marginLeft' : 'marginRight'] = `${scrollbarSize()}px`
@@ -163,7 +170,7 @@ class TimeGridHeader extends React.Component {
         <div className="rbc-label rbc-time-header-gutter" style={{ width }} />
 
         <div className="rbc-time-header-content">
-          <div className="rbc-row rbc-time-header-cell">
+          <div className="rbc-row rbc-time-header-cell" style={headerCellStyle}>
             {this.renderHeaderCells(range)}
           </div>
           {resources && (
