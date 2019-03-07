@@ -83,9 +83,13 @@ class DateContentRow extends React.Component {
     this.eventRow = r
   }
 
+  containerRef = r => {
+    this.container = r
+  }
+
   getContainer = () => {
     const { container } = this.props
-    return container ? container() : findDOMNode(this)
+    return container ? container() : this.container
   }
 
   getRowLimit() {
@@ -180,7 +184,7 @@ class DateContentRow extends React.Component {
 
     return (
       <DateContentRowCollapse enabled={collapsable && levels.length > 5}>
-        <div className={className}>
+        <div className={className} ref={this.containerRef}>
           <BackgroundCells
             date={date}
             getNow={getNow}
