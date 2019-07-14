@@ -411,6 +411,11 @@ class Calendar extends React.Component {
     popup: PropTypes.bool,
 
     /**
+     * Show truncated events in an collapsable view when you click the "+_x_ more" link.
+     */
+    collapsable: PropTypes.bool,
+
+    /**
      * Distance in pixels, from the edges of the viewport, the "show more" overlay should be positioned.
      *
      * ```jsx
@@ -692,6 +697,7 @@ class Calendar extends React.Component {
   static defaultProps = {
     elementProps: {},
     popup: false,
+    collapsable: false,
     toolbar: true,
     view: views.MONTH,
     views: [views.MONTH, views.WEEK, views.DAY, views.AGENDA],

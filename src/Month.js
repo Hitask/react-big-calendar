@@ -66,6 +66,7 @@ let propTypes = {
 
   weekdayFormat: dateFormat,
   popup: PropTypes.bool,
+  collapsable: PropTypes.bool,
 
   messages: PropTypes.object,
   components: PropTypes.object.isRequired,
@@ -90,6 +91,7 @@ class MonthView extends React.Component {
     this.state = {
       rowLimit: 5,
       needLimitMeasure: true,
+      collapsedWeekIdx: null,
     }
   }
 
@@ -130,6 +132,10 @@ class MonthView extends React.Component {
     return findDOMNode(this)
   }
 
+  closeCollapsedWeek = () => {
+    this.setState({ collapsedWeekIdx: null })
+  }
+
   render() {
     let { date, culture, weekdayFormat, className } = this.props,
       month = dates.visibleDays(date, culture),
@@ -165,9 +171,10 @@ class MonthView extends React.Component {
       selected,
       date,
       longPressThreshold,
+      collapsable,
     } = this.props
 
-    const { needLimitMeasure, rowLimit } = this.state
+    const { needLimitMeasure, rowLimit, collapsedWeekIdx } = this.state
 
     events = eventsForWeek(events, week[0], week[week.length - 1], this.props)
     events.sort((a, b) => sortEvents(a, b, this.props))
@@ -175,6 +182,7 @@ class MonthView extends React.Component {
     return (
       <DateContentRow
         key={weekIdx}
+        weekIdx={weekIdx}
         ref={weekIdx === 0 ? 'slotRow' : undefined}
         container={this.getContainer}
         className="rbc-month-row"
@@ -182,7 +190,13 @@ class MonthView extends React.Component {
         date={date}
         range={week}
         events={events}
-        maxRows={rowLimit}
+        maxRows={
+          collapsedWeekIdx === weekIdx
+            ? Infinity
+            : collapsedWeekIdx === null
+            ? rowLimit
+            : 0
+        }
         selected={selected}
         selectable={selectable}
         messages={messages}
@@ -203,6 +217,8 @@ class MonthView extends React.Component {
         eventWrapperComponent={components.eventWrapper}
         dateCellWrapperComponent={components.dateCellWrapper}
         longPressThreshold={longPressThreshold}
+        collapsable={collapsable}
+        closeCollapsedWeek={this.closeCollapsedWeek}
       />
     )
   }
@@ -316,10 +332,15 @@ class MonthView extends React.Component {
     notify(this.props.onDoubleClickEvent, args)
   }
 
-  handleShowMore = (events, date, cell, slot) => {
+  handleShowMore = (events, date, cell, slot, weekIdx) => {
     const { popup, onDrillDown, onShowMore, getDrilldownView } = this.props
     //cancel any pending selections so only the event click goes through.
     this.clearSelection()
+
+    if (this.props.collapsable) {
+      this.setState({ collapsedWeekIdx: weekIdx })
+      return
+    }
 
     if (popup) {
       let position = getPosition(cell, findDOMNode(this))

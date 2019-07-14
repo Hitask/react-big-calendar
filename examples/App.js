@@ -19,6 +19,7 @@ import Basic from './demos/basic'
 import Selectable from './demos/selectable'
 import Cultures from './demos/cultures'
 import Popup from './demos/popup'
+import Collapsable from './demos/Collapsable'
 import Rendering from './demos/rendering'
 import CustomView from './demos/customView'
 import Resource from './demos/resource'
@@ -39,6 +40,7 @@ class Example extends React.Component {
       selectable: Selectable,
       cultures: Cultures,
       popup: Popup,
+      collapsable: Collapsable,
       rendering: Rendering,
       customView: CustomView,
       resource: Resource,
@@ -94,6 +96,11 @@ class Example extends React.Component {
               <li className={cn({ active: selected === 'popup' })}>
                 <a href="#" onClick={this.select.bind(null, 'popup')}>
                   Popup
+                </a>
+              </li>
+              <li className={cn({ active: selected === 'collapsable' })}>
+                <a href="#" onClick={this.select.bind(null, 'collapsable')}>
+                  Collapsable
                 </a>
               </li>
               <li className={cn({ active: selected === 'timeslots' })}>
