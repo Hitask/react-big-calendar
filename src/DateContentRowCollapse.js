@@ -4,19 +4,32 @@ import PropTypes from 'prop-types'
 
 const propTypes = {
   enabled: PropTypes.bool,
+  collapsed: PropTypes.bool,
+  closeCollapsedWeek: PropTypes.func,
 }
 
 const defaultProps = {
   enabled: false,
+  collapsed: true,
+  closeCollapsedWeek: null,
 }
 
 class DateContentRowCollapse extends React.Component {
   state = {
-    collapsed: true,
+    collapsed: this.props.collapsed,
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.collapsed !== this.props.collapsed) {
+      this.setState({ collapsed: this.props.collapsed })
+    }
   }
 
   handleButtonClick = () => {
     this.setState({ collapsed: !this.state.collapsed })
+    if (this.props.closeCollapsedWeek) {
+      this.props.closeCollapsedWeek()
+    }
   }
 
   render() {

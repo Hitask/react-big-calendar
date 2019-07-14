@@ -16,6 +16,7 @@ import DateContentRowCollapse from './DateContentRowCollapse'
 let isSegmentInSlot = (seg, slot) => seg.left <= slot && seg.right >= slot
 
 const propTypes = {
+  weekIdx: PropTypes.number,
   date: PropTypes.instanceOf(Date),
   events: PropTypes.array.isRequired,
   range: PropTypes.array.isRequired,
@@ -30,6 +31,7 @@ const propTypes = {
   longPressThreshold: PropTypes.number,
 
   collapsable: PropTypes.bool,
+  closeCollapsedWeek: PropTypes.func,
 
   onShowMore: PropTypes.func,
   onSelectSlot: PropTypes.func,
@@ -49,9 +51,11 @@ const propTypes = {
 }
 
 const defaultProps = {
+  weekIdx: null,
   minRows: 0,
   maxRows: Infinity,
   collapsable: false,
+  closeCollapsedWeek: null,
 }
 
 class DateContentRow extends React.Component {
@@ -62,7 +66,7 @@ class DateContentRow extends React.Component {
   }
 
   handleShowMore = slot => {
-    const { range, onShowMore } = this.props
+    const { range, onShowMore, weekIdx } = this.props
     let row = qsa(findDOMNode(this), '.rbc-row-bg')[0]
 
     let cell
@@ -72,7 +76,7 @@ class DateContentRow extends React.Component {
       .filter(seg => isSegmentInSlot(seg, slot))
       .map(seg => seg.event)
 
-    onShowMore(events, range[slot - 1], cell, slot)
+    onShowMore(events, range[slot - 1], cell, slot, weekIdx)
   }
 
   createHeadingRef = r => {
@@ -182,8 +186,16 @@ class DateContentRow extends React.Component {
     levels.push([]) // Always add empty row to catch all-day clicks
     while (levels.length < minRows) levels.push([])
 
+    const isMonthView = !!props.closeCollapsedWeek
+    const enabled =
+      collapsable && (isMonthView ? maxRows === Infinity : levels.length > 5)
+
     return (
-      <DateContentRowCollapse enabled={collapsable && levels.length > 5}>
+      <DateContentRowCollapse
+        enabled={enabled}
+        collapsed={maxRows !== Infinity || !props.onShowMore} // opened by default in Month view
+        closeCollapsedWeek={props.closeCollapsedWeek}
+      >
         <div className={className} ref={this.containerRef}>
           <BackgroundCells
             date={date}
