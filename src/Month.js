@@ -193,9 +193,7 @@ class MonthView extends React.Component {
         maxRows={
           collapsedWeekIdx === weekIdx
             ? Infinity
-            : collapsedWeekIdx === null
-            ? rowLimit
-            : 0
+            : collapsedWeekIdx === null ? rowLimit : 0
         }
         selected={selected}
         selectable={selectable}
