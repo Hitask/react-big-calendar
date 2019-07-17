@@ -39,14 +39,19 @@
 
   height: 100%; // ie-fix
 
-  > .rbc-row-content-collapse {
-    max-height: 50vh;
+  .rbc-row-content-collapse {
+    min-height: 21px;
+    max-height: 100%;
+    overflow: auto;
     border-top: 1px solid @cell-border;
 
     > .rbc-month-row {
       height: auto;
-      overflow: scroll;
     }
+  }
+
+  .rbc-collapse-button {
+    border-bottom: 1px solid @cell-border;
   }
 }
 
@@ -54,6 +59,7 @@
   display: flex;
   flex-direction: row;
   background: @day-bg-color;
+  flex-shrink: 0;
 }
 
 .rbc-month-row {
@@ -62,12 +68,12 @@
   flex-direction: column;
   flex: 1 0 0; // postcss will remove the 0px here hence the duplication below
   flex-basis: 0px;
+  min-height: 21px;
   overflow: hidden;
 
   height: 100%; // ie-fix
 
-  & + &,
-  + .rbc-row-content-collapse {
+  & + & {
     border-top: 1px solid @cell-border;
   }
 }
