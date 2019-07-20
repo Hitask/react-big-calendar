@@ -47,20 +47,26 @@ const EXAMPLES = {
   collapsable: 'With expanding month rows',
 }
 
+const DEFAULT_EXAMPLE = 'basic'
+
 class Example extends React.Component {
   constructor(...args) {
     super(...args)
 
-    const hash = (window.location.hash || '').slice(1)
-
     this.state = {
-      selected: EXAMPLES[hash] ? hash : 'basic',
+      selected: DEFAULT_EXAMPLE,
     }
   }
 
   select = selected => {
     this.setState({ selected })
   }
+
+  componentDidMount() {
+    const hash = (window.location.hash || '').slice(1)
+    this.select(hash || DEFAULT_EXAMPLE)
+  }
+
   render() {
     let selected = this.state.selected
     let Current = {
@@ -129,6 +135,7 @@ class Example extends React.Component {
                 <Dropdown.Menu>
                   {Object.entries(EXAMPLES).map(([key, title]) => (
                     <MenuItem
+                      active={this.state.selected === key}
                       key={key}
                       href={`#${key}`}
                       onClick={() => this.select(key)}
