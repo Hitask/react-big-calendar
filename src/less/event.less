@@ -1,6 +1,10 @@
 @import './variables.less';
 
 .rbc-event {
+  border: none;
+  box-shadow: none;
+  margin: 0;
+  padding: @event-padding;
   background-color: @event-bg;
   border-radius: @event-border-radius;
   border: 1px solid @event-border;
@@ -8,7 +12,8 @@
   cursor: pointer;
   font-size: 12px;
   line-height: 2;
-  margin-right: 1px;
+  width: 100%;
+  text-align: left;
 
   .rbc-slot-selecting & {
     cursor: inherit;
@@ -17,6 +22,10 @@
 
   &.rbc-selected {
     background-color: darken(@event-bg, 10%);
+  }
+
+  &:focus {
+    outline: 5px auto @event-outline;
   }
 }
 
@@ -46,14 +55,4 @@
 .rbc-event-continues-later {
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
-}
-
-
-.rbc-event-continues-day-prior {
-  border-top-left-radius: 0;
-  border-top-right-radius: 0;
-}
-
-.rbc-event-content {
-  border-radius: inherit;
 }
