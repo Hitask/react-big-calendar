@@ -654,6 +654,7 @@ class Calendar extends React.Component {
       eventContainerWrapper: elementType,
       dayWrapper: elementType,
       dateCellWrapper: elementType,
+      timeSlotWrapper: elementType,
       timeGutterHeader: elementType,
 
       toolbar: elementType,
@@ -694,6 +695,7 @@ class Calendar extends React.Component {
       date: PropTypes.node,
       time: PropTypes.node,
       event: PropTypes.node,
+      noEventsInRange: PropTypes.node,
       showMore: PropTypes.func,
     }),
   }
@@ -772,6 +774,7 @@ class Calendar extends React.Component {
         dayWrapper: NoopWrapper,
         dateCellWrapper: NoopWrapper,
         weekWrapper: NoopWrapper,
+        timeSlotWrapper: NoopWrapper,
       }),
       accessors: {
         start: wrapAccessor(startAccessor),
@@ -865,7 +868,7 @@ class Calendar extends React.Component {
             view={view}
             views={viewNames}
             label={label}
-            onViewChange={this.handleViewChange}
+            onView={this.handleViewChange}
             onNavigate={this.handleNavigate}
             localizer={localizer}
           />
