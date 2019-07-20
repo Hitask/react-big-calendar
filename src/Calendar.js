@@ -324,6 +324,15 @@ class Calendar extends React.Component {
     onSelecting: PropTypes.func,
 
     /**
+     * Callback fired when a +{count} more is clicked
+     *
+     * ```js
+     * (events: Object, date: Date) => any
+     * ```
+     */
+    onShowMore: PropTypes.func,
+
+    /**
      * The selected event, if any.
      */
     selected: PropTypes.object,
@@ -853,6 +862,7 @@ class Calendar extends React.Component {
       getNow,
       length,
       showMultiDayTimes,
+      onShowMore,
       components: _0,
       formats: _1,
       messages: _2,
@@ -909,7 +919,7 @@ class Calendar extends React.Component {
           onSelectEvent={this.handleSelectEvent}
           onDoubleClickEvent={this.handleDoubleClickEvent}
           onSelectSlot={this.handleSelectSlot}
-          onShowMore={this._showMore}
+          onShowMore={onShowMore}
         />
       </div>
     )
@@ -958,7 +968,11 @@ class Calendar extends React.Component {
     }
 
     let views = this.getViews()
-    this.handleRangeChange(this.props.date || this.props.getNow(), views[view], view)
+    this.handleRangeChange(
+      this.props.date || this.props.getNow(),
+      views[view],
+      view
+    )
   }
 
   handleSelectEvent = (...args) => {
