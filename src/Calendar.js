@@ -683,6 +683,7 @@ class Calendar extends React.Component {
       dateCellWrapper: elementType,
       timeSlotWrapper: elementType,
       timeGutterHeader: elementType,
+      resourceHeader: elementType,
 
       toolbar: elementType,
 
@@ -902,7 +903,6 @@ class Calendar extends React.Component {
           />
         )}
         <View
-          ref="view"
           {...props}
           events={events}
           date={current}
