@@ -215,6 +215,7 @@ class MonthView extends React.Component {
         eventWrapperComponent={components.eventWrapper}
         dateCellWrapperComponent={components.dateCellWrapper}
         longPressThreshold={longPressThreshold}
+        rtl={this.props.rtl}
         collapsable={collapsable}
         closeCollapsedWeek={this.closeCollapsedWeek}
       />
