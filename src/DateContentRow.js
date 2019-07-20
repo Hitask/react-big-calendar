@@ -6,14 +6,11 @@ import React from 'react'
 import { findDOMNode } from 'react-dom'
 
 import dates from './utils/dates'
-import { accessor, elementType } from './utils/propTypes'
-import { eventSegments, endOfRange, eventLevels } from './utils/eventLevels'
 import BackgroundCells from './BackgroundCells'
 import EventRow from './EventRow'
 import EventEndingRow from './EventEndingRow'
 import DateContentRowCollapse from './DateContentRowCollapse'
-
-let isSegmentInSlot = (seg, slot) => seg.left <= slot && seg.right >= slot
+import * as DateSlotMetrics from './utils/DateSlotMetrics'
 
 const propTypes = {
   weekIdx: PropTypes.number,
@@ -22,6 +19,7 @@ const propTypes = {
   range: PropTypes.array.isRequired,
 
   rtl: PropTypes.bool,
+  resourceId: PropTypes.any,
   renderForMeasure: PropTypes.bool,
   renderHeader: PropTypes.func,
 
@@ -35,18 +33,21 @@ const propTypes = {
 
   onShowMore: PropTypes.func,
   onSelectSlot: PropTypes.func,
+  onSelect: PropTypes.func,
   onSelectEnd: PropTypes.func,
   onSelectStart: PropTypes.func,
+  onDoubleClick: PropTypes.func,
   dayPropGetter: PropTypes.func,
 
   getNow: PropTypes.func.isRequired,
-  startAccessor: accessor.isRequired,
-  endAccessor: accessor.isRequired,
+  isAllDay: PropTypes.bool,
 
-  eventComponent: elementType,
-  eventWrapperComponent: elementType.isRequired,
-  dateCellWrapperComponent: elementType,
-  minRows: PropTypes.number,
+  accessors: PropTypes.object.isRequired,
+  components: PropTypes.object.isRequired,
+  getters: PropTypes.object.isRequired,
+  localizer: PropTypes.object.isRequired,
+
+  minRows: PropTypes.number.isRequired,
   maxRows: PropTypes.number.isRequired,
 }
 
@@ -59,6 +60,12 @@ const defaultProps = {
 }
 
 class DateContentRow extends React.Component {
+  constructor(...args) {
+    super(...args)
+
+    this.slotMetrics = DateSlotMetrics.getSlotMetrics()
+  }
+
   handleSelectSlot = slot => {
     const { range, onSelectSlot } = this.props
 
@@ -67,15 +74,13 @@ class DateContentRow extends React.Component {
 
   handleShowMore = slot => {
     const { range, onShowMore, weekIdx } = this.props
+    let metrics = this.slotMetrics(this.props)
     let row = qsa(findDOMNode(this), '.rbc-row-bg')[0]
 
     let cell
     if (row) cell = row.children[slot - 1]
 
-    let events = this.segments
-      .filter(seg => isSegmentInSlot(seg, slot))
-      .map(seg => seg.event)
-
+    let events = metrics.getEventsForSlot(slot)
     onShowMore(events, range[slot - 1], cell, slot, weekIdx)
   }
 
@@ -143,58 +148,58 @@ class DateContentRow extends React.Component {
     const {
       date,
       rtl,
-      events,
       range,
       className,
+      selected,
       selectable,
-      dayPropGetter,
       renderForMeasure,
-      startAccessor,
-      endAccessor,
+
+      accessors,
+      getters,
+      components,
+
       getNow,
       renderHeader,
-      minRows,
-      maxRows,
-      dateCellWrapperComponent,
-      eventComponent,
-      eventWrapperComponent,
+      onSelect,
+      localizer,
       onSelectStart,
       onSelectEnd,
+      onDoubleClick,
+      resourceId,
       longPressThreshold,
+      isAllDay,
       collapsable,
-      ...props
     } = this.props
 
     if (renderForMeasure) return this.renderDummy()
 
-    let { first, last } = endOfRange(range)
+    let metrics = this.slotMetrics(this.props)
+    let { levels, extra } = metrics
 
-    let segments = (this.segments = events.map(evt =>
-      eventSegments(
-        evt,
-        first,
-        last,
-        {
-          startAccessor,
-          endAccessor,
-        },
-        range
-      )
-    ))
+    let WeekWrapper = components.weekWrapper
 
-    let { levels, extra } = eventLevels(segments, Math.max(maxRows - 1, 1))
-    levels.push([]) // Always add empty row to catch all-day clicks
-    while (levels.length < minRows) levels.push([])
+    const eventRowProps = {
+      selected,
+      accessors,
+      getters,
+      localizer,
+      components,
+      onSelect,
+      onDoubleClick,
+      resourceId,
+      slotMetrics: metrics,
+    }
 
-    const isMonthView = !!props.closeCollapsedWeek
+    const isMonthView = !!this.props.closeCollapsedWeek
     const enabled =
-      collapsable && (isMonthView ? maxRows === Infinity : levels.length > 5)
+      collapsable &&
+      (isMonthView ? this.props.maxRows === Infinity : levels.length > 5)
 
     return (
       <DateContentRowCollapse
         enabled={enabled}
-        collapsed={maxRows !== Infinity || !props.onShowMore} // opened by default in Month view
-        closeCollapsedWeek={props.closeCollapsedWeek}
+        collapsed={this.props.maxRows !== Infinity || !this.props.onShowMore} // opened by default in Month view
+        closeCollapsedWeek={this.props.closeCollapsedWeek}
       >
         <div className={className} ref={this.containerRef}>
           <BackgroundCells
@@ -204,47 +209,32 @@ class DateContentRow extends React.Component {
             range={range}
             selectable={selectable}
             container={this.getContainer}
-            dayPropGetter={dayPropGetter}
+            getters={getters}
             onSelectStart={onSelectStart}
             onSelectEnd={onSelectEnd}
             onSelectSlot={this.handleSelectSlot}
-            cellWrapperComponent={dateCellWrapperComponent}
+            components={components}
             longPressThreshold={longPressThreshold}
           />
 
           <div className="rbc-row-content">
             {renderHeader && (
-              <div className="rbc-row" ref={this.createHeadingRef}>
+              <div className="rbc-row " ref={this.createHeadingRef}>
                 {range.map(this.renderHeadingCell)}
               </div>
             )}
-            {levels.map((segs, idx) => (
-              <EventRow
-                {...props}
-                key={idx}
-                start={first}
-                end={last}
-                segments={segs}
-                slots={range.length}
-                eventComponent={eventComponent}
-                eventWrapperComponent={eventWrapperComponent}
-                startAccessor={startAccessor}
-                endAccessor={endAccessor}
-              />
-            ))}
-            {!!extra.length && (
-              <EventEndingRow
-                {...props}
-                start={first}
-                end={last}
-                segments={extra}
-                onShowMore={this.handleShowMore}
-                eventComponent={eventComponent}
-                eventWrapperComponent={eventWrapperComponent}
-                startAccessor={startAccessor}
-                endAccessor={endAccessor}
-              />
-            )}
+            <WeekWrapper isAllDay={isAllDay} {...eventRowProps}>
+              {levels.map((segs, idx) => (
+                <EventRow key={idx} segments={segs} {...eventRowProps} />
+              ))}
+              {!!extra.length && (
+                <EventEndingRow
+                  segments={extra}
+                  onShowMore={this.handleShowMore}
+                  {...eventRowProps}
+                />
+              )}
+            </WeekWrapper>
           </div>
         </div>
       </DateContentRowCollapse>
