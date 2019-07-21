@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types'
 import React from 'react'
-import dates from '../../utils/dates'
+import * as dates from '../../utils/dates'
 import { findDOMNode } from 'react-dom'
 
 import Selection, {
@@ -94,7 +94,7 @@ class EventContainerWrapper extends React.Component {
       'minutes'
     )
 
-    this.update(event, slotMetrics.getRange(currentSlot, end))
+    this.update(event, slotMetrics.getRange(currentSlot, end, false, true))
   }
 
   handleResize(point, boundaryBox) {

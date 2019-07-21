@@ -1,35 +1,35 @@
-$day-bg-color: #ffffff;
+$day-bg-color: #ffffff !default;
 
-$out-of-range-color: #7a8090;
-$out-of-range-bg-color: #fafafa;
+$out-of-range-color: #7a8090 !default;
+$out-of-range-bg-color: #fafafa !default;
 
-$calendar-border: #efefef;
-$cell-border: #efefef;
-$cell-color: #3d445e;
+$calendar-border: #efefef !default;
+$cell-border: #efefef !default;
+$cell-color: #3d445e !default;
 
-$border-color: #CCC;
+$border-color: #CCC !default;
 
-$segment-width: percentage(1 / 7);
+$segment-width: percentage(1 / 7) !default;
 
-$time-selection-color: white;
-$time-selection-bg-color: rgba(0,0,0, .50);
-$date-selection-bg-color: rgba(0,0,0, .10);
+$time-selection-color: white !default;
+$time-selection-bg-color: rgba(0,0,0, .50) !default;
+$date-selection-bg-color: rgba(0,0,0, .10) !default;
 
 
-$event-bg: #fff8f0;
-$event-border: #efefef;
-$event-outline: #3b99fc;
-$event-color: #3d4148;
-$event-border-radius: 2px;
-$event-padding: 0;
-$event-zindex: 4;
+$event-bg: #fff8f0 !default;
+$event-border: #efefef !default;
+$event-outline: #3b99fc !default;
+$event-color: #3d4148 !default;
+$event-border-radius: 2px !default;
+$event-padding: 0 !default;
+$event-zindex: 4 !default;
 
-$btn-color: #373a3c;
-$btn-bg: #fff;
-$btn-border: #ccc;
+$btn-color: #373a3c !default;
+$btn-bg: #fff !default;
+$btn-border: #ccc !default;
 
-$current-time-color: #74ad31;
+$current-time-color: #74ad31 !default;
 
-$rbc-css-prefix: rbc-i;
+$rbc-css-prefix: rbc-i !default;
 
-$today-highlight-bg: #eaf6ff;
+$today-highlight-bg: #eaf6ff !default;
