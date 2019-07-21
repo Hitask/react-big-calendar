@@ -1,6 +1,7 @@
 @import './variables';
 @import './reset';
 
+
 .rbc-calendar {
   box-sizing: border-box;
   height: 100%;
@@ -39,7 +40,7 @@
   color: $out-of-range-color;
 }
 
-.rbc-off-range-bg {
+.rbc-off-range-bg.rbc-day-bg {
   background: $out-of-range-bg-color;
 }
 
@@ -48,11 +49,9 @@
   flex: 1 0 0%;
   text-overflow: ellipsis;
   white-space: nowrap;
-  padding: 0 3px;
+  padding: 3px;
   text-align: center;
   vertical-align: middle;
-  font-weight: bold;
-  font-size: 90%;
   min-height: 0;
   border-bottom: 1px solid $cell-border;
 
@@ -73,6 +72,35 @@
   }
 }
 
+.rbc-row-content-collapse {
+  overflow-y: scroll;
+  max-height: 421px;
+
+  &.collapsed {
+    max-height: 25px * 5.5; // 5.5 rows
+  }
+
+  > .rbc-allday-cell {
+    overflow-y: visible !important;
+  }
+}
+
+.rbc-collapse-button {
+  display: block;
+  flex: 0 0 auto;
+  width: 100%;
+  padding: 0;
+  border: none;
+  border-top: 1px solid $cell-border;
+  outline: none;
+  cursor: pointer;
+  user-select: none;
+  font-size: 11px;
+  line-height: 21px;
+  height: 21px;
+  background: $day-bg-color;
+}
+
 .rbc-row-content {
   position: relative;
   user-select: none;
@@ -81,7 +109,14 @@
 }
 
 .rbc-today {
-  background-color: $today-highlight-bg;
+  background-color: $today-highlight-bg !important;
+}
+
+.rbc-month-view,
+.rbc-time-view,
+.rbc-agenda-view {
+  font-size: 14px;
+  color: $cell-color;
 }
 
 @import './toolbar';
