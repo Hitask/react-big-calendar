@@ -43,7 +43,7 @@ storiesOf('Big Calendar', module)
     return (
       <div style={{ height: 600, background: '#fafafa' }}>
         <Calendar
-          defaultView={Calendar.Views.DAY}
+          defaultView={Views.DAY}
           min={moment('12:00am', 'h:mma').toDate()}
           max={moment('11:59pm', 'h:mma').toDate()}
           events={duplicateAllDayEvents(events, 10)}
@@ -60,7 +60,7 @@ storiesOf('Big Calendar', module)
     return (
       <Calendar
         selectable
-        defaultView={Calendar.Views.MONTH}
+        defaultView={Views.MONTH}
         min={moment('12:00am', 'h:mma').toDate()}
         max={moment('11:59pm', 'h:mma').toDate()}
         events={duplicateTodayEvents(events, 10)}
