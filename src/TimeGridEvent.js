@@ -27,12 +27,12 @@ function TimeGridEvent(props) {
 
   let { height, top, width, xOffset } = style
   const inner = [
-    <div key="1" className="rbc-event-label">
-      {label}
-    </div>,
-    <div key="2" className="rbc-event-content">
+    <div key="1" className="rbc-event-content">
       {Event ? <Event event={event} title={title} /> : title}
     </div>,
+    // <div key="2" className="rbc-event-label">
+    //   {label}
+    // </div>,
   ]
 
   return (

@@ -1,4 +1,6 @@
 #!/usr/bin/env bash 
  
 rm -rf ../hitask-web/node_modules/@hitask/react-big-calendar/lib
+rm -rf ../hitask-web/node_modules/@hitask/react-big-calendar/dist
 cp -r lib ../hitask-web/node_modules/@hitask/react-big-calendar
+cp -r dist ../hitask-web/node_modules/@hitask/react-big-calendar
