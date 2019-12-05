@@ -22,6 +22,7 @@ storiesOf('Big Calendar', module)
   .add('demo', () => (
     <Calendar
       popup
+      popupOffset={{ x: -10, y: -20 }}
       events={demoEvents}
       onSelectEvent={action('event selected')}
       defaultDate={new Date(2015, 3, 1)}
