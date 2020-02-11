@@ -727,6 +727,11 @@ class Calendar extends React.Component {
     }),
 
     /**
+     * Color theme id
+     */
+    theme: PropTypes.string,
+
+    /**
      * A day event layout(arrangement) algorithm.
      * `overlap` allows events to be overlapped.
      * `no-overlap` resizes events to avoid overlap.
@@ -871,6 +876,7 @@ class Calendar extends React.Component {
       length,
       showMultiDayTimes,
       onShowMore,
+      theme,
       components: _0,
       formats: _1,
       messages: _2,
@@ -907,6 +913,7 @@ class Calendar extends React.Component {
             onView={this.handleViewChange}
             onNavigate={this.handleNavigate}
             localizer={localizer}
+            theme={theme}
           />
         )}
         <View
@@ -927,6 +934,7 @@ class Calendar extends React.Component {
           onDoubleClickEvent={this.handleDoubleClickEvent}
           onSelectSlot={this.handleSelectSlot}
           onShowMore={onShowMore}
+          theme={theme}
         />
       </div>
     )
