@@ -117,7 +117,10 @@ export const events = [
 const duplicateEvents = (events, filter, times) => {
   if (!times) return events
   return duplicateEvents(events, filter, times - 1).concat(
-    events.filter(filter)
+    events.filter(filter).map(event => ({
+      ...event,
+      title: `${Math.floor(Math.random() * 100)} ${event.title}`,
+    }))
   )
 }
 
