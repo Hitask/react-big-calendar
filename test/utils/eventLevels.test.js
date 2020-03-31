@@ -467,6 +467,7 @@ describe('sortEvents', () => {
     start: e => e.start,
     end: e => e.end,
     allDay: e => e.allDay,
+    title: e => e.title,
   }
 
   describe('when the events start on different calendar days', () => {
